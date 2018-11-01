@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Javascript Project 1 | Form</title>
+    </head>
+    <body>
+        <form id="tax-calculator" action="" onsubmit="return false;">
+            <div>
+                <label>Marital Status:</label>
+                <input type="radio" name="marital-status" value="single">Single</input>
+                <input type="radio" name="marital-status" value="married">Married</input>
+                <input type="radio" name="marital-status" value="widowed">Widowed</input>
+            </div>
+            <div>
+                <label>Age attained in 2018 (From January 1st 2018):</label>
+                <input type="number" id="your-age" name="age" value="Please enter your age"></input>
+            </div>
+            <div>
+                <label>Gross Salary (Salary before tax):</label>
+                <input type="number" id="grossSalary" name="gross-salary"></input>
+            </div>
+            <button onclick=getMaritalStatus();>What is your marital status?</button>
+            <button onclick=checkAge();>Check Age</button>
+            <button onclick=standardRate();>Calculate Tax (Tax Credits, PRSI and USC not included...yet...)</button>
+        </form>
+    </body>
+</html>
+
+<script type="text/javascript">
+'use strict'
+let taxForm = document.forms["tax-calculator"];
+let cutOffNumber = 34550;
+
+let marital_status = new Array();
+marital_status["single"] = "You are single \u{1F613}";
+marital_status["married"] = "You are married \u{1F60D}";
+marital_status["widowed"] = "You are widowed \u26B0";
+
+function getMaritalStatus() {
+    let marital_status_value=0;
+    let selectedMaritalStatus = taxForm.elements["marital-status"];
+
+    for(let i = 0; i < selectedMaritalStatus.length; i++){
+        if(selectedMaritalStatus[i].checked){
+            marital_status_value = marital_status[selectedMaritalStatus[i].value];
+        break;
+        }
+    }
+    alert(marital_status_value);
+}
+
+function checkAge(){
+    let selectedAge = parseInt(document.getElementById("your-age").value)
+    if (selectedAge < 16) {
+        console.log("You must be over 16 to work");
+    }
+}
+
+function standardRate(){
+    let enteredSalary = parseInt(document.getElementById("grossSalary").value);
+    if (enteredSalary < cutOffNumber){
+        let standardTaxCalc = enteredSalary * 0.2;
+        alert("€" + standardTaxCalc);
+    }
+    else {
+        let standardTaxCalc = cutOffNumber * 0.2;
+        let higherRateBalance = enteredSalary - cutOffNumber;
+        let higherRateCalc = higherRateBalance * 0.4;
+        alert("Gross Salary: €" + enteredSalary + "\n" + "Standard Tax Rate: €" + standardTaxCalc + "\n" + "Higher Tax Rate: €" + higherRateCalc + "\n" + "Total Tax: €" + (standardTaxCalc + higherRateCalc)) + "\n" + "Net Salary: €" + (grossSalary - (standardTaxCalc + higherRateCalc));
+    }
+}
+</script>
